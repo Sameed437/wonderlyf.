@@ -5,8 +5,6 @@ import SectionHeading from "../components/SectionHeading";
 import ProductCard from "../components/ProductCard";
 import HeroProducts from "../components/animations/HeroProducts";
 import HoneyProcess from "../components/animations/HoneyProcess";
-import HeroParticles from "../components/animations/HeroParticles";
-import TextReveal from "../components/animations/TextReveal";
 import AnimatedCounter from "../components/animations/AnimatedCounter";
 import StaggeredReveal from "../components/animations/StaggeredReveal";
 import Marquee from "../components/animations/Marquee";
@@ -14,7 +12,6 @@ import CategoryCarousel from "../components/animations/CategoryCarousel";
 import WhyChooseUs from "../components/animations/WhyChooseUs";
 import ProductJourney from "../components/animations/ProductJourney";
 import ProductShowcase from "../components/animations/ProductShowcase";
-import HoneyDrip from "../components/animations/HoneyDrip";
 import HeroVideo from "../components/animations/HeroVideo";
 import {
   products,
@@ -42,44 +39,58 @@ export default function Home() {
         <Marquee items={marqueeItems} />
       </div>
 
-      {/* ─── HERO ─── */}
-      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden py-16">
+      {/* ─── HERO (Full-screen video) ─── */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         <HeroVideo />
-        <HoneyDrip />
-        <HeroParticles />
-        <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-8 grid md:grid-cols-2 gap-12 items-center">
-          <motion.div initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }}>
-            <motion.p className="text-honey text-sm tracking-widest uppercase mb-4 font-medium" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}>
+
+        {/* Hero content — centered over video */}
+        <div className="relative z-10 max-w-4xl mx-auto px-4 md:px-8 text-center">
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.3 }}>
+            <motion.p
+              className="text-honey-light text-sm md:text-base tracking-widest uppercase mb-5 font-medium"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6 }}
+            >
               Crafting Authentic, Nutritious Food
             </motion.p>
-            <h1 className="font-serif text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6">
-              <TextReveal text="Bring Wonders" as="span" className="honey-text-shimmer" staggerDelay={0.06} />
+            <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-bold leading-tight mb-6 text-white drop-shadow-lg">
+              Bring Wonders
               <br />
-              <TextReveal text="to your Life" as="span" className="text-warm-brown" staggerDelay={0.08} />
+              <span className="text-honey-light">to your Life</span>
             </h1>
-            <p className="text-warm-light text-lg leading-relaxed mb-8 max-w-lg">
-              Wonderlyf is dedicated to crafting authentic, nutritious food products rooted in traditional wisdom. From our kitchen to yours.
+            <p className="text-white/80 text-lg md:text-xl leading-relaxed mb-10 max-w-2xl mx-auto drop-shadow">
+              Traditional wellness products rooted in ancient wisdom. Pure. Natural. Homemade.
             </p>
-            <div className="flex flex-wrap gap-4">
-              <Link to="/shop" className="inline-flex items-center gap-2 bg-honey text-white px-8 py-3.5 rounded-full font-bold hover:bg-honey-dark transition-all duration-300 no-underline shadow-warm cta-pulse">
-                Shop Now <ArrowRight size={18} />
+            <div className="flex flex-wrap gap-4 justify-center">
+              <Link to="/shop" className="inline-flex items-center gap-2 bg-honey text-white px-10 py-4 rounded-full font-bold text-lg hover:bg-honey-light hover:text-warm-brown transition-all duration-300 no-underline shadow-warm-lg cta-pulse">
+                Shop Now <ArrowRight size={20} />
               </Link>
-              <Link to="/about" className="inline-flex items-center gap-2 bg-white border border-honey/20 text-warm-brown px-8 py-3.5 rounded-full font-semibold hover:border-honey/40 transition-all duration-300 no-underline shadow-warm">
-                Our Story <ChevronRight size={18} />
+              <Link to="/about" className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/30 text-white px-10 py-4 rounded-full font-semibold text-lg hover:bg-white/25 transition-all duration-300 no-underline">
+                Our Story <ChevronRight size={20} />
               </Link>
             </div>
           </motion.div>
-
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.2 }}>
-            <HeroProducts />
-          </motion.div>
         </div>
 
-        <motion.div className="absolute bottom-6 left-1/2 -translate-x-1/2" animate={{ y: [0, 8, 0] }} transition={{ duration: 2, repeat: Infinity }}>
-          <div className="w-5 h-8 border-2 border-warm-brown/20 rounded-full flex justify-center pt-1">
-            <div className="w-1 h-2 bg-honey/60 rounded-full" />
+        {/* Scroll indicator */}
+        <motion.div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10" animate={{ y: [0, 10, 0] }} transition={{ duration: 2, repeat: Infinity }}>
+          <div className="w-6 h-10 border-2 border-white/40 rounded-full flex justify-center pt-2">
+            <motion.div className="w-1.5 h-3 bg-honey rounded-full" animate={{ y: [0, 8, 0], opacity: [1, 0.3, 1] }} transition={{ duration: 2, repeat: Infinity }} />
           </div>
         </motion.div>
+      </section>
+
+      {/* ─── FLOATING PRODUCTS SECTION ─── */}
+      <section className="py-20 bg-cream relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 md:px-8">
+          <SectionHeading
+            subtitle="Our Range"
+            title="Products Made with Love"
+            description="Explore our handcrafted collection of traditional wellness products."
+          />
+          <HeroProducts />
+        </div>
       </section>
 
       {/* ─── STATS ─── */}
