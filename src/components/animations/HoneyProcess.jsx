@@ -33,6 +33,7 @@ export default function HoneyProcess() {
 
   return (
     <>
+      {/* ─── DESKTOP: Scroll-pinned ─── */}
       <div ref={containerRef} className="relative hidden md:block" style={{ height: "500vh" }}>
         <div className="sticky top-0 h-screen flex items-center overflow-hidden bg-cream">
           <div className="max-w-7xl mx-auto px-8 w-full grid grid-cols-2 gap-16 items-center">
@@ -55,13 +56,11 @@ export default function HoneyProcess() {
                   <linearGradient id="hp-glassGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stopColor="rgba(44,24,16,0.06)" /><stop offset="100%" stopColor="rgba(44,24,16,0.02)" /></linearGradient>
                   <clipPath id="hp-honeyClip"><motion.rect x="38" width="124" height="140" style={{ y: honeyFill }} /></clipPath>
                 </defs>
-
                 <motion.g style={{ opacity: stage1Opacity }}>
                   <motion.g style={{ x: leaf1X, y: leaf1Y }}><ellipse cx="60" cy="120" rx="15" ry="8" fill="rgba(76,175,80,0.5)" transform="rotate(-30 60 120)" /></motion.g>
                   <motion.g style={{ x: leaf2X, y: leaf2Y }}><ellipse cx="140" cy="100" rx="12" ry="7" fill="rgba(76,175,80,0.4)" transform="rotate(20 140 100)" /></motion.g>
                   <motion.g style={{ y: leaf3Y }}><circle cx="100" cy="160" r="6" fill="rgba(212,148,10,0.4)" />{[0,60,120,180,240,300].map(a => <circle key={a} cx={100+Math.cos(a*Math.PI/180)*10} cy={160+Math.sin(a*Math.PI/180)*10} r="4" fill="rgba(212,148,10,0.2)" />)}</motion.g>
                 </motion.g>
-
                 <motion.path d="M55 65 Q40 80 38 120 L38 230 Q38 255 60 260 L140 260 Q162 255 162 230 L162 120 Q160 80 145 65 Z" fill="none" stroke="rgba(212,148,10,0.3)" strokeWidth="1.5" style={{ pathLength: jarOutline }} />
                 <motion.path d="M55 65 Q40 80 38 120 L38 230 Q38 255 60 260 L140 260 Q162 255 162 230 L162 120 Q160 80 145 65 Z" fill="url(#hp-glassGrad)" style={{ opacity: useTransform(scrollYProgress, [0.3, 0.4], [0, 1]) }} />
                 <g clipPath="url(#hp-honeyClip)"><path d="M42 130 L42 228 Q42 252 62 256 L138 256 Q158 252 158 228 L158 130 Q150 125 100 122 Q50 125 42 130 Z" fill="url(#hp-honeyGrad)" opacity="0.85" /></g>
@@ -94,17 +93,43 @@ export default function HoneyProcess() {
         </div>
       </div>
 
-      <div className="md:hidden px-4 py-12 space-y-12">
-        {honeyProcessStages.map((stage, i) => (
-          <motion.div key={stage.step} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="text-center">
-            <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-honey/10 border border-honey/20 flex items-center justify-center">
-              <span className="text-honey font-bold text-sm">{stage.step}</span>
-            </div>
-            <h3 className="font-serif text-xl font-bold text-warm-brown mb-1">{stage.title}</h3>
-            <p className="text-warm-light italic text-sm mb-2">{stage.subtitle}</p>
-            <p className="text-warm-light/70 text-sm max-w-xs mx-auto">{stage.description}</p>
-          </motion.div>
-        ))}
+      {/* ─── MOBILE: Timeline layout ─── */}
+      <div className="md:hidden px-4 py-16">
+        <div className="relative max-w-sm mx-auto">
+          {/* Connecting line */}
+          <div className="absolute left-6 top-8 bottom-8 w-0.5 bg-honey/20" />
+
+          {honeyProcessStages.map((stage, i) => (
+            <motion.div
+              key={stage.step}
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ delay: i * 0.1, type: "spring", stiffness: 120 }}
+              className="relative pl-16 pb-10 last:pb-0"
+            >
+              {/* Step circle on the line */}
+              <div className="absolute left-3 top-0 w-7 h-7 rounded-full bg-honey/15 border-2 border-honey flex items-center justify-center">
+                <span className="text-honey font-bold text-xs">{stage.step}</span>
+              </div>
+
+              <div className="bg-white rounded-xl p-4 shadow-warm border border-honey/10">
+                <p className="text-honey text-[10px] tracking-[0.2em] uppercase font-medium mb-1">
+                  Step {stage.step}
+                </p>
+                <h3 className="font-serif text-lg font-bold text-warm-brown mb-1">
+                  {stage.title}
+                </h3>
+                <p className="text-warm-light italic text-sm mb-2">
+                  {stage.subtitle}
+                </p>
+                <p className="text-warm-light/70 text-xs leading-relaxed">
+                  {stage.description}
+                </p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </>
   );

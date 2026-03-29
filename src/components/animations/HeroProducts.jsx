@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 const heroProducts = [
@@ -82,22 +83,28 @@ const heroProducts = [
 ];
 
 export default function HeroProducts() {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  // Show fewer products on mobile for performance
+  const visibleProducts = isMobile ? heroProducts.slice(0, 4) : heroProducts;
+
   return (
-    <div className="relative w-full h-[400px] md:h-[500px]">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-honey/8 rounded-full blur-3xl" />
+    <div className="relative w-full h-[350px] md:h-[500px]">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 md:w-64 h-48 md:h-64 bg-honey/8 rounded-full blur-3xl" />
 
       <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 md:w-96 md:h-96 rounded-full border border-honey/10"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-56 h-56 md:w-96 md:h-96 rounded-full border border-honey/10"
         animate={{ rotate: 360 }}
         transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
       />
-      <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-52 h-52 md:w-72 md:h-72 rounded-full border border-warm-brown/5"
-        animate={{ rotate: -360 }}
-        transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
-      />
 
-      {heroProducts.map((product) => (
+      {visibleProducts.map((product) => (
         <motion.div
           key={product.name}
           className="absolute"
@@ -140,7 +147,7 @@ export default function HeroProducts() {
               src={product.image}
               alt={product.name}
               className="relative drop-shadow-lg"
-              style={{ width: product.size, height: product.size, objectFit: "contain" }}
+              style={{ width: isMobile ? product.size * 0.7 : product.size, height: isMobile ? product.size * 0.7 : product.size, objectFit: "contain" }}
               draggable={false}
             />
             <motion.div className="absolute -bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300">
